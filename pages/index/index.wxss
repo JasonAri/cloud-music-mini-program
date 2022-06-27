@@ -1,0 +1,126 @@
+/* pages/index/index.wxss */
+.banners {
+    width: 100%;
+    height: 300rpx;
+}
+
+.banners image {
+    width: 100%;
+    height: 100%;
+}
+
+/* 5个图标导航区域 */
+.navContainer {
+    display: flex;
+}
+
+.navItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+}
+
+.navItem .iconfont {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 100rpx;
+    background: rgb(240, 19, 19);
+    font-size: 50rpx;
+    color: #fff;
+    margin: 20rpx 0;
+}
+
+.navItem text {
+    font-size: 26rpx;
+}
+
+/* 推荐歌曲区域 */
+.recommendContainer {
+    padding: 20rpx;
+}
+
+/* 推荐歌曲内容区 */
+.recommendScroll {
+    display: flex;
+    /* 为了防止flex布局高度计算异常，预先给定高度 */
+    height: 300rpx;
+}
+
+.scrollItem {
+    width: 200rpx;
+    margin-right: 20rpx;
+}
+
+.scrollItem image {
+    width: 200rpx;
+    height: 200rpx;
+    border-radius: 10rpx;
+}
+
+.scrollItem text {
+    font-size: 26rpx;
+    /* 单行文本溢出隐藏 用省略号代替 */
+    /* display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+
+    /* 多行文本溢出隐藏，省略号代替 （对英文只能单行溢出隐藏）*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*设置对其模式*/
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+/* 排行榜 */
+.topList {
+    padding: 20rpx;
+}
+
+.topListSwiper {
+    /* swiper有个默认高度为150px，需要自己改*/
+    height: 400rpx;
+}
+
+.swiperItem {
+    width: 96%;
+    background-color: #fbfbfb;
+}
+
+.swiperItem .title {
+    font-size: 30rpx;
+    line-height: 80rpx;
+}
+
+.musicItem {
+    /* 开启flex，会让其子元素自动变成block */
+    display: flex;
+    margin-bottom: 20rpx;
+}
+
+.musicItem image {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 10rpx;
+}
+
+.musicItem .count {
+    width: 100rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+}
+
+.musicItem .musicName {
+    height: 100rpx;
+    line-height: 100rpx;
+    max-width: 400rpx;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

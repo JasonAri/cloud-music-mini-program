@@ -1,0 +1,43 @@
+<view class="videoContainer">
+    <!-- 头部区域 -->
+    <view class="header">
+        <image src="/static/images/video/video.jpg" />
+        <view class="search">搜索视频</view>
+        <image src="/static/images/logo.png" />
+    </view>
+    <!-- 导航区 -->
+    <scroll-view scroll-x enable-flex scroll-into-view="{{'scroll'+navId}}" scroll-with-animation class="navScroll">
+        <view id="{{'scroll'+item.id}}" class="navItem" wx:for="{{videoGroupList}}" wx:key="id">
+            <view class="navContent {{navId===item.id?'active':''}}" bindtap="changeNav" id="{{item.id}}">
+                {{item.name}}
+            </view>
+        </view>
+    </scroll-view>
+    <!-- 视频列表区域 -->
+    <scroll-view scroll-y class="videoScroll">
+        <view class="videoItem" wx:for="{{videoList}}" wx:key="id">
+            <!-- 视频 -->
+            <video src="{{item.data.urlInfo.url}}" bindplay="handlePlay" id="{{item.data.vid}}" />
+            <!-- 视频简介 -->
+            <view class="content">{{item.data.title}}</view>
+            <!-- 视频底部 -->
+            <view class="footer">
+                <image class="avatar" src="{{item.data.creator.avatarUrl}}" />
+                <text class="nickName">{{item.data.creator.nickname}}</text>
+                <view class="comments_praised">
+                    <text class="item">
+                        <text class="iconfont icon-buoumaotubiao15"></text>
+                        <text class="count">{{item.data.praisedCount}}</text>
+                    </text>
+                    <text class="item">
+                        <text class="iconfont icon-pinglun1"></text>
+                        <text class="count">{{item.data.commentCount}}</text>
+                    </text>
+                    <button open-type="share" class="item btn">
+                        <text class="iconfont icon-gengduo"></text>
+                    </button>
+                </view>
+            </view>
+        </view>
+    </scroll-view>
+</view>
