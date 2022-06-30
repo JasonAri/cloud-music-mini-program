@@ -38,8 +38,8 @@ Page({
     // 表单项内容发生改变的回调
     handleInput(event) {
         // let type = event.currentTarget.id; // 取值： phone || password
-        let type = event.currentTarget.dataset.type; // data-key=value
-        console.log(type, event.detail.value);
+        let type = event.currentTarget.dataset.type // data-key=value
+        // console.log(type, event.detail.value)
         this.setData({
             [type]: event.detail.value
         })
@@ -48,7 +48,7 @@ Page({
     // 登录的回调
     async login() {
         // 1.手机表单项数据
-        let { phone, password } = this.data;
+        let { phone, password } = this.data
         /* 
             手机号验证
                 内容为空
