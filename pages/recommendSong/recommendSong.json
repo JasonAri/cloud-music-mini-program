@@ -1,3 +1,4 @@
 {
-    "usingComponents": {}
+    "navigationBarBackgroundColor": "#91CDF6",
+    "navigationBarTitleText": "每日推荐"
 }

@@ -1,1 +1,90 @@
-/* pages/recommendSong/recommendSong.wxss */
+/* 头部样式 */
+.recommendSongContainer .header {
+    position: relative;
+    width: 100%;
+    height: 300rpx;
+}
+
+.recommendSongContainer .header image {
+    width: 100%;
+    height: 100%;
+}
+
+.recommendSongContainer .header .date {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -150rpx;
+    margin-top: -50rpx;
+    width: 300rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+    color: #fff;
+}
+
+.header .date .day {
+    font-size: 64rpx;
+}
+
+/* 列表区域 */
+.ListContainer {
+    position: relative;
+    top: -20rpx;
+    padding: 0 20rpx;
+    border-radius: 30rpx;
+    background-color: #fff;
+}
+
+.listHeader {
+    height: 80rpx;
+    line-height: 80rpx;
+}
+
+.listHeader .changeMore {
+    float: right;
+}
+
+/* 内容区域 */
+.listScroll {
+    height: calc(100vh - 380rpx);
+}
+
+.scrollItem {
+    position: relative;
+    display: flex;
+    margin-bottom: 20rpx;
+}
+
+.scrollItem image {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 8rpx;
+}
+
+.musicInfo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20rpx;
+}
+
+.musicInfo text {
+    /* text为內联元素，设置高度不生效，可以通过其父元素设置display：flex 让子元素变成块元素 */
+    height: 40rpx;
+    line-height: 40rpx;
+    font-size: 24rpx;
+    /* 歌曲信息宽度防溢出 */
+    max-width: 400rpx;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scrollItem .iconfont {
+    position: absolute;
+    right: 0;
+    width: 80rpx;
+    height: 80rpx;
+    text-align: right;
+    line-height: 80rpx;
+}
