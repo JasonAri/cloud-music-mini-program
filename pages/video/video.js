@@ -182,6 +182,13 @@ Page({
         }, 6000)
     },
 
+    // 跳转至发现界面的回调
+    handleToSearch() {
+        wx.navigateTo({
+            url: '/pages/search/search'
+        })
+    },
+
 
     /**
      * 生命周期函数--监听页面初次渲染完成

@@ -1,0 +1,52 @@
+<view class="searchContainer">
+    <!-- 头部搜索区域 -->
+    <view class="header">
+        <view class="searchInput">
+            <!-- 放大镜图标 -->
+            <text class="iconfont icon-search1 searchIcon"></text>
+            <!-- 删除输入框内容的图标 -->
+            <text class="iconfont icon-shanchu1 clear" bindtap="handleClearSearchContent" hidden="{{!searchContent}}"></text>
+            <!-- 输入框默认内容 -->
+            <input type="text" value="{{searchContent}}" placeholder="{{placeholderContent}}" placeholder-class="placeholder" bindinput="handleInputChange" />
+        </view>
+        <text class="cancel" bindtap="handleCancel" wx:if="{{!searchContent}}">取消</text>
+        <text class="search" bindtap="handleSearch" wx:else>搜索</text>
+    </view>
+    <block wx:if="{{searchList.length}}">
+        <!-- 搜索内容展示 -->
+        <view class="showSearchContent">
+            <view class="searchContent">搜索内容：{{searchContent}}</view>
+            <view class="searchList">
+                <view class="searchItem" wx:for="{{searchList}}" wx:key="id">
+                    <text class="iconfont icon-search1"></text>
+                    <text class="content">{{item.name}}</text>
+                </view>
+            </view>
+        </view>
+    </block>
+    <block wx:else>
+        <!-- 搜索历史记录 -->
+        <view class="historyContainer" wx:if="{{historyList.length}}">
+            <view class="header">
+                <text class="title">历史</text>
+                <!-- 删除记录按钮 -->
+                <text class="iconfont icon-shanchu delete" bindtap="handleDeleteHistory"></text>
+            </view>
+            <!-- 历史项 -->
+            <view class="history">
+                <view class="historyItem" wx:for="{{historyList}}" wx:key="item">{{item}}</view>
+            </view>
+        </view>
+        <!-- 热搜榜 -->
+        <view class="hotContainer">
+            <view class="title">热搜榜</view>
+            <view class="hotList">
+                <view class="hotItem" wx:for="{{hotList}}" wx:key="searchWord">
+                    <text class="order">{{index+1}}</text>
+                    <text class="order">{{item.searchWord}}</text>
+                    <image class="iconImg" wx:if="{{item.iconUrl}}" src="{{item.iconUrl}}" />
+                </view>
+            </view>
+        </view>
+    </block>
+</view>
