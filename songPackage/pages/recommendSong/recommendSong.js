@@ -1,7 +1,7 @@
 import PubSub from 'pubsub-js'
 import moment from 'moment'
 
-import request from '../../utils/request'
+import request from '../../../utils/request'
 Page({
 
     /**
@@ -94,7 +94,7 @@ Page({
 
         // 路由跳转传参
         wx.navigateTo({
-            url: '/pages/songDetail/songDetail?musicId=' + song.id // 参数需要转换成JSON格式
+            url: '/songPackage/pages/songDetail/songDetail?musicId=' + song.id // 参数需要转换成JSON格式
         })
     },
 

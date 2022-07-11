@@ -13,6 +13,20 @@ Page({
         topList: [], //排行榜数据
     },
 
+    // 获取openId的回调
+    handleGetOpenId() {
+        // 获取登录凭证
+        wx.login({
+            success: async (res) => {
+                console.log(res)
+                let code = res.code
+                // 发送登录凭证到服务器
+                let result = await request('/getOpenId', { code })
+                console.log('result:',result)
+            }
+        })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -56,7 +70,7 @@ Page({
 
     toRecommendSong() {
         wx.navigateTo({
-            url: '/pages/recommendSong/recommendSong'
+            url: '/songPackage/pages/recommendSong/recommendSong'
         })
     },
 
