@@ -22,7 +22,7 @@ Page({
                 let code = res.code
                 // 发送登录凭证到服务器
                 let result = await request('/getOpenId', { code })
-                console.log('result:',result)
+                console.log('result:', result)
             }
         })
     },
@@ -50,7 +50,7 @@ Page({
                 2.idx的取值范围是0-20，我们需要0-4
                 3.需要发送5次请求
         */
-        let index = 0
+        /* let index = 0
         let resultArr = []
         while (index < 5) {
             let topListData = await request('/top/list', { idx: index++ })
@@ -60,17 +60,40 @@ Page({
             this.setData({
                 topList: resultArr
             })
-        }
+        } */
         // 更新topList放在此处会导致发送请求过程中长时间白屏，用户体验差
         // this.setData({
         //     topList: resultArr
         // })
 
+
     },
 
+    // 跳转搜索页面的回调
+    toSearch() {
+        wx.navigateTo({
+            url: '/pages/search/search'
+        })
+    },
+
+    // 跳转每日推荐的回调
     toRecommendSong() {
         wx.navigateTo({
             url: '/songPackage/pages/recommendSong/recommendSong'
+        })
+    },
+
+    // 跳转私人FM的回调
+    toPersonalFM() {
+        wx.navigateTo({
+            url: '/songPackage/pages/personalFM/personalFM'
+        })
+    },
+
+    // 跳转登录中心的回调
+    toLogin() {
+        wx.navigateTo({
+            url: '/pages/login/login'
         })
     },
 

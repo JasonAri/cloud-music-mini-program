@@ -1,5 +1,6 @@
 .header {
     padding-bottom: 20rpx;
+    position: relative;
 }
 
 .header .title {
@@ -9,9 +10,11 @@
 }
 
 .header .more {
-    float: right;
+    position: absolute;
+    bottom: 15rpx;
+    right: 0;
     border: 1rpx solid #333;
-    padding: 10rpx 20rpx;
+    padding: 8rpx 20rpx;
     font-size: 26rpx;
     border-radius: 30rpx;
 }

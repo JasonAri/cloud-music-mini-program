@@ -235,3 +235,10 @@
   height: 200rpx;
   border-radius: 10rpx;
 }
+
+/* 暂无历史记录 */
+.withoutRecent text {
+  padding-left: 40rpx;
+  font-size: 26rpx;
+  color: #333;
+}

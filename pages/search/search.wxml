@@ -17,9 +17,12 @@
         <view class="showSearchContent">
             <view class="searchContent">搜索内容：{{searchContent}}</view>
             <view class="searchList">
-                <view class="searchItem" wx:for="{{searchList}}" wx:key="id">
+                <view class="searchItem" wx:for="{{searchList}}" wx:key="id" bindtap="toSongDetail">
                     <text class="iconfont icon-search1"></text>
-                    <text class="content">{{item.name}}</text>
+                    <view class="content">
+                        <text class="name">{{item.name}}</text>
+                        <text class="artists">{{item.artists[0].name}}</text>
+                    </view>
                 </view>
             </view>
         </view>

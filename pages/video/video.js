@@ -6,10 +6,11 @@ Page({
      * 页面的初始数据
      */
     data: {
-        videoGroupList: [], // 导航标签数据
+        videoCategoryList: [], // 视频分类导航数据
         navId: '', // 导航标识
         videoList: [], // 视频列表数据
         videoId: '', // 视频id标识
+        videoUrl: '', // 视频url
         videoUpdateTime: [], // 记录video播放时长
         isTriggered: false, // 标识下拉刷新是否被触发
     },
@@ -20,44 +21,56 @@ Page({
     onLoad(options) {
         // 判断用户是否登录
         let userInfo = wx.getStorageSync('userInfo')
-        if (!userInfo) {
-            wx.showToast({
-                title: '请先登录',
-                icon: 'none',
-                success: () => {
-                    // 跳转至登录界面
-                    wx.reLaunch({
-                        url: '/pages/login/login'
-                    })
+        if (!userInfo) { // 未登录
+            // 模态框询问个人登录还是游客登录
+            wx.showModal({
+                title: '登录',
+                content: '手机号登录或者游客登录',
+                cancelText: '退出',
+                confirmText: '去登录',
+                success: (res) => {
+                    if (res.confirm) wx.reLaunch({ url: '/pages/login/login' })
                 }
             })
         }
-        // 获取导航数据
-        this.getVideoGroupListData()
+        // 获取导航视频分类数据
+        this.getVideoCategoryListData()
     },
 
-    // 获取导航数据
-    async getVideoGroupListData() {
-        let videoGroupListData = await request('/video/group/list')
-        this.setData({
-            videoGroupList: videoGroupListData.data.slice(0, 14), // 更新data中的videoGropList数据
-            navId: videoGroupListData.data[0].id, // 标识第一个导航项为 active
-        })
-
-        // 获取视频列表数据
+    // 获取视频分类列表的功能函数
+    async getVideoCategoryListData() {
+        let videoCategoryListData = await request('/video/category/list')
+        if (videoCategoryListData.data) {
+            this.setData({
+                videoCategoryList: videoCategoryListData.data.slice(0, 14), // 更新data中的videCategoryList数据
+                navId: videoCategoryListData.data[0].id, // 标识第一个导航项为 active
+            })
+        } else {
+            wx.showModal({
+                title: '请求不到数据',
+                content: `msg:${videoCategoryListData.msg},错误代码:${videoCategoryListData.code}`
+            })
+        }
+        // 初始化获取当前视频分类下的视频
         this.getVideoList(this.data.navId)
     },
 
-    // 获取视频列表数据
+    // 获取当前视频分类下的视频
     async getVideoList(navId) {
         // 若navId为空，则不获取视频列表
         if (!navId) return
+        // 获取videoList
         let videoListData = await request('/video/group', { id: navId })
         // 关闭‘正在加载’提示框
         wx.hideLoading()
+        // 声明一个索引
         let index = 0
-        let videoList = videoListData.datas.map(item => {
+        // 使用map方法给数据添加id属性 (用于作为唯一标识)
+        let videoMap = videoListData.datas.map(item => {
+            // let urlInfoData = await request('/video/url', { id: item.data.vid })
+            // item.data.urlInfo = urlInfoData.urls[0].url
             item.id = index++
+            return item
         })
         this.setData({
             videoList: videoListData.datas,
@@ -70,7 +83,8 @@ Page({
     changeNav(event) {
         let navId = event.currentTarget.id;
         this.setData({
-            navId: navId >>> 0,
+            // 将navId强制转换成Numbers
+            navId: navId >>> 0, // 无符号右移
             // 清空旧页面视频列表
             videoList: []
         })
@@ -84,7 +98,7 @@ Page({
     },
 
     // 点击播放/继续播放的回调
-    handlePlay(event) {
+    async handlePlay(event) {
         /*
             功能需求：
                 1.在点击播放的事件中需要找到上一个播放的视频
@@ -97,19 +111,24 @@ Page({
                 优点：节省内存空间
         
         */
+
         // 声明本次点击的视频的vid
         let vid = event.currentTarget.id
+        // 发请求获取视频url
+        let videoUrlData = await request('/video/url', { id: vid })
 
         /* 
         因为用image代替video预展示，不再需要判断video是否为上一次点击的video
         // 关闭上一个播放的video实例 （且上一次点击和本次点击视频不为同一视频时触发）
         this.vid !== vid && this.videoContext && this.videoContext.stop() // 当videoContext有值再调用stop
         // 更新vid到video页面的实例对象中
-        this.vid = vid */
+        this.vid = vid 
+        */
 
         // 更新data中的videoId的状态
         this.setData({
-            videoId: vid
+            videoId: vid,
+            videoUrl: videoUrlData.urls[0].url
         })
 
         // 创建控制video标签的实例对象
@@ -123,7 +142,7 @@ Page({
         videoItem && this.videoContext.seek(videoItem.currentTime)
 
         // 调用实例的play方法播放视频
-        this.videoContext.play()
+        // this.videoContext.play()
     },
 
     // 监听视频播放进度的回调
@@ -172,23 +191,7 @@ Page({
     // 自定义上拉触底的回调
     handleToLower() {
         /* 这里可以为数据分页做添加视频列表的功能 （由于接口没提供分页功能，未完成） */
-
-        /* 提示已经到底 */
-        setTimeout(() => {
-            wx.showToast({
-                title: '已经到底啦',
-                icon: 'none'
-            })
-        }, 6000)
     },
-
-    // 跳转至发现界面的回调
-    handleToSearch() {
-        wx.navigateTo({
-            url: '/pages/search/search'
-        })
-    },
-
 
     /**
      * 生命周期函数--监听页面初次渲染完成

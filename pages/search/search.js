@@ -40,35 +40,19 @@ Page({
         })
     },
 
-    // 取消按钮的回调
-    handleCancel() {
-        wx.navigateBack()
-    },
-
-    // 搜索按钮的回调
-    handleSearch() {
-        // 跳转歌曲详情页面 （无后端数据，未完成）
-        wx.showModal({
-            title:'页面开发中',
-            content: '服务未返回歌曲详情数据！'
-        })
-        // 更新缓存搜索历史
-        this.setHistoryList()
-    },
-
-
     // 表单项内容发生改变的回调
     handleInputChange(event) {
         // 更新searchContent的状态数据
         this.setData({
             searchContent: event.detail.value.trim()
         })
-        // 函数防抖
+
+        /* // 函数防抖 （频繁调用接口，暂时不开放）
         clearTimeout(timer)
         timer = setTimeout(() => {
             // 调用函数 发请求获取searchList
             this.getSearchList()
-        }, 300)
+        }, 300) */
     },
 
     // 获取searchList的功能函数 
@@ -132,6 +116,29 @@ Page({
             }
         })
 
+    },
+
+    // 取消按钮的回调
+    handleCancel() {
+        wx.navigateBack()
+    },
+
+    // 搜索按钮的回调
+    async handleSearch() {
+        // 发请求获取搜索结果
+        await this.getSearchList()
+        // 更新缓存搜索历史
+        this.setHistoryList()
+    },
+
+    // 点击搜索项跳转歌曲播放页面
+    toSongDetail(event) {
+        // 获取当前点击时间的id标识
+        console.log(event)
+        // 携带参数跳转
+        wx.navigateTo({
+            url: '/songPackage/pages/songDetail/songDetail' + song.id
+        })
     },
 
     /**

@@ -25,7 +25,10 @@ Page({
      */
     data: {
         phone: '', // 手机号
-        password: '', // 密码
+        // password: '', // 不建议使用密码登录
+        captcha: '', // 验证码
+        btnDisabled: false, // 按钮是否被禁用
+        btnText: '获取验证码', // 获取验证码按钮的文本
     },
 
     /**
@@ -45,17 +48,12 @@ Page({
         })
     },
 
-    // 登录的回调
-    async login() {
-        // 1.手机表单项数据
-        let { phone, password } = this.data
-        /* 
-            手机号验证
-                内容为空
-                格式不正确
-                验证通过
-        */
-        if (!phone) {
+    // 获取验证码的回调
+    async handleGetCaptcha(event) {
+        // 取出data中的数据
+        let { phone } = this.data
+        // 前端验证手机号
+        if (!phone) { // 若手机号为空
             // 提示用户
             wx.showToast({
                 title: '手机号不能为空',
@@ -65,85 +63,117 @@ Page({
         }
         // 定义正则表达式
         let phoneReg = /^1[3-9]\d{9}$/
-        if (!phoneReg.test(phone)) {
+        if (!phoneReg.test(phone)) { // 若手机号格式不正确
             wx.showToast({
                 title: '手机号格式错误',
                 icon: 'error'
             })
             return;
         }
-
-        if (!password) {
+        // 显示Loading
+        wx.showLoading({
+            title: '发送中'
+        })
+        // 发请求获取验证码
+        let result = await request('/captcha/sent', { phone })
+        // 关闭Loading
+        wx.hideLoading()
+        if (result.code == 200) {
             wx.showToast({
-                title: '密码不能为空',
-                icon: 'error'
+                title: '验证码发送成功'
             })
-            return;
+            // 开启倒计时
+            this.setTimer(30)
+        } else {
+            wx.showToast({
+                title: `获取验证码失败，错误代码：${result.code}`,
+                icon: 'none'
+            })
         }
+    },
 
-        // wx.showToast({
-        //     title: '前端验证通过'
-        // })
+    // 设置倒计时的功能函数
+    setTimer(countdown) { // countdown为倒计时长
+        // 禁用按钮
+        this.setData({
+            btnDisabled: true,
+        })
+        // 开启定时器
+        let interval = setInterval(() => {
+            if (countdown == 0) { // 若倒计时结束
+                // 激活按钮，恢复文本
+                this.setData({
+                    btnDisabled: false,
+                    btnText: '获取验证码',
+                })
+                // 清除当前定时器
+                clearInterval(interval)
+            } else { // 倒计时未结束
+                countdown--
+                this.setData({
+                    btnText: `${countdown}s后重新获取`
+                })
+            }
+        }, 1000)
+    },
 
+    // 登录的回调
+    async login() {
+        let { phone, captcha } = this.data
+        // 显示Loading
+        wx.showLoading({
+            title: '登录中'
+        })
         // 后端验证
-        /* localhost:3000端口在2022.6.17后无法返回用户登录数据 */
-        // let result = await request('/login/cellphone', { phone, password, isLogin:true });
-
-        /* 临时借用api登录获取userInfo */
-        let result = await new Promise((resolve, reject) => {
-            wx.request({
-                url: 'http://music.cyrilstudio.top/login/cellphone',
-                data: { phone, password },
-                method: 'GET',
-                success: (res) => {
-                    // 用户登录并保存cookie
-                    wx.setStorage({
-                        key: 'cookies',
-                        data: res.cookies
-                    })
-                    resolve(res.data)
-                },
-                fail: (err) => {
-                    reject(err)
-                }
-            })
-        });
-
-
+        let result = await request('/login/cellphone', { phone, captcha, isLogin: true });
+        // 关闭Loading
+        wx.hideLoading()
         if (result.code === 200) {
             wx.showToast({
                 title: '登录成功',
             })
             // 将用户的信息存储至本地
             wx.setStorageSync('userInfo', JSON.stringify(result.profile))
+            // 用户登录需要的cookie字段
+            let cookie = wx.getStorageSync('cookies').find(item => item.indexOf('MUSIC_U') !== -1)
+            wx.setStorageSync('cookie', cookie)
             // 登录成功跳转回个人中心页面，但不能用navigateTo跳tapbar
             wx.reLaunch({
                 url: '/pages/personal/personal'
             })
-        } else if (result.code === 400) {
-            wx.showToast({
-                title: '手机号错误',
-                icon: 'error'
-            })
-        } else if (result.code === 501) {
-            wx.showToast({
-                title: '账号不存在',
-                icon: 'error'
-            })
-        } else if (result.code === 502) {
-            wx.showToast({
-                title: '密码错误',
-                icon: 'error'
-            })
         } else {
             wx.showToast({
-                title: `登录失败，请重新登录 错误代码：${result.code}`,
+                title: `${result.msg},错误代码：${result.code}`,
                 icon: 'none'
             })
         }
+    },
 
+    // 游客登录的回调
+    async visitorLogin() {
+        // 显示Loading
+        wx.showLoading({
+            title: '登录中'
+        })
+        // 获取游客cookies (传参 isLogin)
+        let result = await request('/register/anonimous', { isLogin: true })
+        // 关闭Loading
+        wx.hideLoading()
+        // 自定义游客的信息
+        let userInfo = { nickname: `游客${result.userId}` }
+        // 将游客的信息存储至本地
+        wx.setStorageSync('userInfo', JSON.stringify(userInfo))
 
-
+        // 游客登录需要的cookie字段
+        let cookie = wx.getStorageSync('cookies').find(item => item.indexOf('__csrf') !== -1).split(' ')[0] + ' '
+            + wx.getStorageSync('cookies').find(item => item.indexOf('NMTID=') !== -1).split(' ')[0] + ' '
+            + wx.getStorageSync('cookies').find(item => item.indexOf('MUSIC_A=') !== -1).split(';')[0]
+        // 将游客的信息存储至本地
+        wx.setStorageSync('cookie', cookie)
+        // 登录成功跳转回个人中心页面，但不能用navigateTo跳tapbar
+        wx.reLaunch({
+            url: '/pages/personal/personal'
+        })
     },
 
     /**

@@ -1,4 +1,4 @@
-// 发送ajax情哭泣
+// 发送ajax 请求
 /* 封装功能函数 */
 
 import config from './config'
@@ -11,7 +11,8 @@ export default (url, data = {}, method = 'GET') => {
             data,
             method,
             header: {
-                cookie: wx.getStorageSync('cookies') ? wx.getStorageSync('cookies').find(item => item.indexOf('MUSIC_U') !== -1) : ''
+                // 读取storage中的cookie
+                cookie: wx.getStorageSync('cookie') ? wx.getStorageSync('cookie') : ''
             },
             success: (res) => {
                 // 若为用户登录请求，则存储cookies

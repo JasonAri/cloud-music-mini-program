@@ -46,7 +46,8 @@
             "root": "songPackage",
             "pages": [
                 "pages/recommendSong/recommendSong",
-                "pages/songDetail/songDetail"
+                "pages/songDetail/songDetail",
+                "pages/personalFM/personalFM"
             ]
         }
     ],

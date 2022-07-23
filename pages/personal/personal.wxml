@@ -1,12 +1,12 @@
 <view class="personalContainer">
   <view class="user-section">
-    <image class="bg" src="/static/images/personal/bgImg2.jpg"></image>
+    <image class="bg" src="{{userInfo.backgroundUrl?userInfo.backgroundUrl:'/static/images/personal/bgImg2.jpg'}}"></image>
     <view class="user-info-box" bindtap="toLogin">
       <view class="portrait-box">
         <image class="portrait" src='{{userInfo.avatarUrl?userInfo.avatarUrl:"/static/images/personal/missing-face.png"}}'></image>
       </view>
       <view class="info-box">
-        <text class="username">{{userInfo.nickname?userInfo.nickname:"游客"}}</text>
+        <text class="username">{{userInfo.nickname?userInfo.nickname:"未登录"}}</text>
       </view>
     </view>
     <view class="vip-card-box">
@@ -15,10 +15,10 @@
       <view class="tit">
         <!-- 会员图标 -->
         <text class="iconfont icon-huiyuan-"></text>
-        硅谷会员
+        云音乐会员
       </view>
-      <text class="e-m">atguigu Union</text>
-      <text class="e-b">开通会员听歌, 撸代码</text>
+      <text class="e-m">cloud-music Union</text>
+      <text class="e-b">开通会员听歌，个性化定制</text>
     </view>
   </view>
   <view class="cover-container" bindtouchstart="handleTouchStart" bindtouchmove="handleTouchMove" bindtouchend="handleTouchEnd" style="transform:{{coverTransform}};transition:{{coverTransition}}">
@@ -52,7 +52,9 @@
             <image src="{{item.song.al.picUrl}}" />
           </view>
         </scroll-view>
-        <view wx:else>暂无播放记录</view>
+        <view wx:else class="withoutRecent">
+          <text>暂无播放记录</text>
+        </view>
       </view>
       <view class="cardList">
         <view class="card-item">

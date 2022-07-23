@@ -1,20 +1,31 @@
+<!-- 登录中心 -->
 <view class="container">
   <view class="wrapper">
     <view class="left-top-sign">LOGIN</view>
     <view class="welcome">欢迎回来！</view>
     <view class="input-content">
+      <!-- 手机号输入框 -->
       <view class="input-item">
         <text class="tit">手机号码</text>
         <input type="text" placeholder="请输入手机号码" data-type="phone" id="phone" bindinput="handleInput" />
       </view>
-      <view class="input-item">
-        <text class="tit">密码</text>
-        <input type="password" placeholder="请输入密码"data-type="password" id="password" bindinput="handleInput" />
+      <!-- 验证码输入框 -->
+      <view class="input-captcha-wrapper">
+        <view class="input-item">
+          <text class="tit">验证码</text>
+          <input type="text" placeholder="请输入验证码" data-type="captcha" id="captcha" bindinput="handleInput" />
+        </view>
+        <button class="get-captcha-btn {{btnDisabled?'get-captcha-btn2':''}}" bindtap="handleGetCaptcha" disabled="{{btnDisabled}}">
+          {{btnText}}
+        </button>
       </view>
     </view>
+    <!-- 登录按钮 -->
     <button class="confirm-btn" bindtap="login">登录</button>
     <view class="forget-section">忘记密码?</view>
+    
   </view>
+  <view class="visitor-section" bindtap="visitorLogin">游客登录</view>
   <view class="register-section">
     还没有账号?
     <text>马上注册</text>

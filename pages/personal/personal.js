@@ -28,7 +28,6 @@ Page({
             this.setData({
                 userInfo: JSON.parse(userInfo)
             })
-
             // 获取用户播放记录
             this.getUserRecentPlayList(this.data.userInfo.userId)
         }
@@ -36,6 +35,7 @@ Page({
 
     //获取用户播放记录的函数
     async getUserRecentPlayList(userId) {
+        if (!userId) { return }
         let recentPlayListData = await request('/user/record', { uid: userId, type: 0 });
         /* recentPlayListData没有唯一标识，需要自己添加 */
         let index = 0;
@@ -79,9 +79,30 @@ Page({
 
     // 跳转至登录Login页面的回调
     toLogin() {
-        wx.navigateTo({
-            url: '/pages/login/login'
-        })
+        // 判断登录状态
+        if (wx.getStorageSync('userInfo')) { // 若已登录
+            // 模态框询问是否退出登录
+            wx.showModal({
+                title: '您已登录，确认退出登录吗？',
+                confirmColor: '#d43c33',
+                success: (res) => {
+                    if (res.confirm) { // 若确认
+                        // 清除所有缓存
+                        wx.clearStorageSync()
+                        // 移除data内的状态数据
+                        this.setData({
+                            userInfo: {},
+                            recentPlayList: []
+                        })
+                    }
+                }
+            })
+        } else { // 未登录
+            // 跳转Login页面
+            wx.navigateTo({
+                url: '/pages/login/login'
+            })
+        }
     },
 
     /**

@@ -2,6 +2,6 @@
     <text class="title">{{title}}</text>
     <view>
         <text>{{nav}}</text>
-        <text class="more">查看更多</text>
+        <text class="more">更多</text>
     </view>
 </view>

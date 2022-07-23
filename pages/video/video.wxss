@@ -1,29 +1,3 @@
-/* pages/video/video.wxss */
-
-.videoContainer .header {
-    display: flex;
-    height: 82rpx;
-    padding: 5px;
-    box-sizing: border-box;
-}
-
-.videoContainer .header image {
-    width: 60rpx;
-    height: 60rpx;
-}
-
-.videoContainer .header .search {
-    border: 1rpx solid #eee;
-    /* flex默认值: flex-grow:0 ,flex-shrink:1 ,flex-basis:auto */
-    /* flex:1 flex-grow:1, flex-shrink:1 ,flex-basis:0%*/
-    flex: 1;
-    margin: 0 20rpx;
-    font-size: 26rpx;
-    text-align: center;
-    line-height: 60rpx;
-    color: #d43c33;
-}
-
 /* 导航区域 */
 .navScroll {
     display: flex;

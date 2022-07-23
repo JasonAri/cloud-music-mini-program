@@ -1,0 +1,31 @@
+<view class="personalFMContainer">
+    <!-- 专辑图片 -->
+    <view class="blurPicContainer ">
+        <image class="blurPic" src="{{songs[index].picUrl}}" />
+    </view>
+    <!-- 歌曲信息 -->
+    <view class="songInfo">
+        <view class="name">{{songs[index].musicName}}</view>
+        <view class="artists">{{songs[index].artists}}</view>
+    </view>
+    <!-- 进度条控制区域 -->
+    <view class="progressControl">
+        <text>{{currentTime}}</text>
+        <view class="barControl">
+            <!-- 实时进度条 -->
+            <view class="audio-currentTime-Bar" style="width:{{currentWidth+'rpx'}}">
+                <!-- 小圆球 -->
+                <view class="audio-circle"></view>
+            </view>
+        </view>
+        <text>{{songs[index].duration}}</text>
+    </view>
+    <!-- 底部控制播放区域 -->
+    <view class="musicControl">
+        <text class="iconfont icon-iconsMusicyemianbofangmoshiShuffle"></text>
+        <text class="iconfont icon-buoumaotubiao15 like" id="pre" bindtap="handleLike"></text>
+        <text class="iconfont {{isPlay?'icon-zanting':'icon-bofang'}} {{isPlay?'size':'big'}}" bindtap="handleMusicPlay"></text>
+        <text class="iconfont icon-next" id="next" bindtap="handleSwitch"></text>
+        <text class="iconfont icon-iconsMusicyemianbofangmoshiPlayList"></text>
+    </view>
+</view>

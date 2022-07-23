@@ -19,16 +19,15 @@ Page({
      */
     onLoad(options) {
         // 判断用户是否登录
-        let userInfo = wx.getStorageSync('userInfo')
-        if (!userInfo) {
-            wx.showToast({
-                title: '请先登录',
-                icon: 'none',
-                success: () => {
-                    // 跳转至登录界面
-                    wx.reLaunch({
-                        url: '/pages/login/login'
-                    })
+        if (!wx.getStorageSync('userInfo')) { // 未登录
+            // 模态框询问个人登录还是游客登录
+            wx.showModal({
+                title: '登录',
+                content: '手机号登录或者游客登录',
+                cancelText: '退出',
+                confirmText: '去登录',
+                success: (res) => {
+                    if (res.confirm) wx.reLaunch({ url: '/pages/login/login' })
                 }
             })
         }
@@ -77,13 +76,19 @@ Page({
 
     // 获取每日推荐数据
     async getRecommendList() {
+        // 数据返回前显示Loading
+        wx.showLoading({
+            title: '歌曲加载中'
+        })
+        //  请求每日推荐歌曲
         let recommendListData = await request('/recommend/songs')
         this.setData({
-            recommendList: recommendListData.recommend
+            recommendList: recommendListData.data.dailySongs
         })
+        wx.hideLoading()
     },
 
-    // 跳转至songDetail页面
+    // 跳转至songDetail页面的回调
     toSongDetail(event) {
         // 标记的recommendList里的song和索引index
         let { song, index } = event.currentTarget.dataset
