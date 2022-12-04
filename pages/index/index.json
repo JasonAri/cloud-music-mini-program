@@ -1,5 +1,6 @@
 {
     "usingComponents": {
-        "NavHeader":"/components/NavHeader/NavHeader"
+        "NavHeader": "/components/NavHeader/NavHeader",
+        "mp-loading":"weui-miniprogram/loading/loading"
     }
 }

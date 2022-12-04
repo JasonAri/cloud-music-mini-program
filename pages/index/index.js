@@ -10,27 +10,12 @@ Page({
     data: {
         bannerList: [], // 轮播图数据
         recommendList: [], // 推荐歌单
-        topList: [], //排行榜数据
+        topList: [], // 排行榜数据
+        loading: true, // 数据加载中的标识 
     },
 
-    // 获取openId的回调
-    handleGetOpenId() {
-        // 获取登录凭证
-        wx.login({
-            success: async (res) => {
-                console.log(res)
-                let code = res.code
-                // 发送登录凭证到服务器
-                let result = await request('/getOpenId', { code })
-                console.log('result:', result)
-            }
-        })
-    },
-
-    /**
-     * 生命周期函数--监听页面加载
-     */
-    async onLoad(options) {
+    // 获取轮播图、推荐歌单数据的回调
+    async getData() {
         // 获取轮播图数据
         let bannerListData = await request('/banner', { type: 2 })
         this.setData({
@@ -42,6 +27,12 @@ Page({
         this.setData({
             recommendList: recommendListData.result
         })
+
+        if (bannerListData.code == 200 && recommendListData.code == 200) {
+            return 'ok'
+        } else {
+            return Promise.reject('请求失败');
+        }
 
         // 获取排行榜数据
         /* 
@@ -65,8 +56,31 @@ Page({
         // this.setData({
         //     topList: resultArr
         // })
+    },
 
+    // 获取openId的回调
+    handleGetOpenId() {
+        // 获取登录凭证
+        wx.login({
+            success: async (res) => {
+                console.log(res)
+                let code = res.code
+                // 发送登录凭证到服务器
+                let result = await request('/getOpenId', { code })
+                console.log('result:', result)
+            }
+        })
+    },
 
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad(options) {
+        this.getData().then(() => {
+            this.setData({
+                loading: false
+            })
+        }).catch(() => { });
     },
 
     // 跳转搜索页面的回调

@@ -57,5 +57,8 @@
                 "songPackage"
             ]
         }
+    },
+    "useExtendedLib": {
+        "weui": true
     }
 }
